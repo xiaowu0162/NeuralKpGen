@@ -64,13 +64,28 @@ python decode.py \
 --data_dir "$SRCDIR/${DATASET}/" \
 --checkpoint_dir ${SAVE_DIR_PREFIX}_checkpoints \
 --checkpoint_file checkpoint_last.pt \
---output_file logs/${DATASET}_hypotheses.txt \
+--output_file logs/${DATASET}_hypotheses_1.txt \
 --batch_size 64 \
 --beam 1 \
---min_len 16 \
+--min_len 1 \
 --lenpen 1.0 \
 --no_repeat_ngram_size 3 \
---max_len_b 60;
+--max_len_b 60 \
+--decoder_number 1;
+
+python decode.py \
+--data_name_or_path "$SRCDIR/${DATASET}-bin/" \
+--data_dir "$SRCDIR/${DATASET}/" \
+--checkpoint_dir ${SAVE_DIR_PREFIX}_checkpoints \
+--checkpoint_file checkpoint_last.pt \
+--output_file logs/${DATASET}_hypotheses_2.txt \
+--batch_size 64 \
+--beam 1 \
+--min_len 1 \
+--lenpen 1.0 \
+--no_repeat_ngram_size 3 \
+--max_len_b 60 \
+--decoder_number 2;
 
 }
 
@@ -113,7 +128,7 @@ elif [[ $2 == 'kptimes-dual' ]]; then
     #decode "$1" $2 $2
     #evaluate ${SRCDIR}/${2} "logs/${2}" $2
 elif [[ $2 == 'kptimes-dual-debug' ]]; then
-    train "$1" $2
+    #train "$1" $2
     #decode "$1" $2 $2
-    #evaluate ${SRCDIR}/${2} "logs/${2}" $2
+    evaluate ${SRCDIR}/${2} "logs/${2}" $2
 fi
